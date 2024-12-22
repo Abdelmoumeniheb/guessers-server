@@ -57,7 +57,6 @@ public class GuessPaperService {
             } else if(guessPaper.getGuesses().stream().allMatch(singleGuess -> singleGuess.getEventGuessOptionCase().getStatus().equals(EventGuessOptionCaseStatusEnum.WON))) {
                 guessPaper.setStatus(GuessPaperStatusEnum.WON);
                 roomUserRepository.findByRoomAndUser(guessPaper.getRoom(), guessPaper.getUser()).ifPresent(roomUser -> {
-                    roomUser.setBalance(roomUser.getBalance() + guessPaper.getWins());
                     roomUserRepository.save(roomUser);
                 });
             }
@@ -74,14 +73,9 @@ public class GuessPaperService {
 
         RoomUser ru = roomUserRepository.findByRoomAndUser(room, user).orElseThrow(() -> new UnauthorizedException("You are not one of the members of this room. Only the members can create guess papers."));
 
-        if(ru.getBalance() < createGuessPaperRequest.getStake() && !room.isBorderless()) {
-            return new BaseResponse("You do not have enough balance to create this guess paper.", false, true, null);
-        }
-
         GuessPaper guessPaper = new GuessPaper();
         guessPaper.setUser(user);
         guessPaper.setRoom(room);
-        guessPaper.setStake(createGuessPaperRequest.getStake());
         guessPaper.setStatus(GuessPaperStatusEnum.IN_PROGRESS);
 
         // Map SingleGuessDto to SingleGuess and add to GuessPaper
@@ -102,13 +96,9 @@ public class GuessPaperService {
         }).collect(Collectors.toList());
         guessPaper.getGuesses().addAll(singleGuesses);
 
-        guessPaper.setTotalOdd(singleGuesses.stream().mapToDouble(singleGuess -> singleGuess.getEventGuessOptionCase().getOdds()).reduce(1, (a, b) -> a * b));
-        guessPaper.setWins(guessPaper.getTotalOdd() * guessPaper.getStake());
-
         logger.info("Saving guess paper for user {}.", username);
         GuessPaper savedGuessPaper = guessPaperRepository.save(guessPaper);
 
-        ru.setBalance(ru.getBalance() - createGuessPaperRequest.getStake());
         roomUserRepository.save(ru);
         logger.info("Guess paper with id {} created successfully.", savedGuessPaper.getId());
 

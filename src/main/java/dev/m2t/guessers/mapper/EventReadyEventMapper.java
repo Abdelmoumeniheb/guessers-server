@@ -20,7 +20,6 @@ public class EventReadyEventMapper {
             for(ReadyEventOptionCase reoc: reo.getReadyEventOptionCases()) {
                 EventGuessOptionCase eventGuessOptionCase = new EventGuessOptionCase();
                 eventGuessOptionCase.setName(reoc.getName());
-                eventGuessOptionCase.setOdds(reoc.getOdds());
                 eventGuessOption.addEventGuessOptionCase(eventGuessOptionCase);
             }
 

@@ -7,6 +7,7 @@ public class ListPublicRoomsResponse {
     Page<Room> rooms;
 
     public ListPublicRoomsResponse() {
+        this.rooms = Page.empty(); // Initialize with an empty page
     }
 
     public ListPublicRoomsResponse(Page<Room> rooms) {

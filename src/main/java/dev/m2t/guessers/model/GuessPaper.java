@@ -24,10 +24,6 @@ public class GuessPaper {
     @OneToMany(mappedBy = "guessPaper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleGuess> guesses = new ArrayList<>();
 
-    private Double totalOdd = 1.0;
-    private Double stake;
-    private Double wins;
-
     @Enumerated(EnumType.STRING)
     private GuessPaperStatusEnum status;
 
@@ -37,13 +33,10 @@ public class GuessPaper {
 
     }
 
-    public GuessPaper(User user, Room room, List<SingleGuess> guesses, Double totalOdd, Double stake, Double wins, GuessPaperStatusEnum status) {
+    public GuessPaper(User user, Room room, List<SingleGuess> guesses, GuessPaperStatusEnum status) {
         this.user = user;
         this.room = room;
         this.guesses = guesses;
-        this.totalOdd = totalOdd;
-        this.stake = stake;
-        this.wins = wins;
         this.status = status;
     }
 
@@ -71,22 +64,6 @@ public class GuessPaper {
         this.guesses = guesses;
     }
 
-    public Double getTotalOdd() {
-        return totalOdd;
-    }
-
-    public void setTotalOdd(Double totalOdd) {
-        this.totalOdd = totalOdd;
-    }
-
-    public Double getStake() {
-        return stake;
-    }
-
-    public void setStake(Double stake) {
-        this.stake = stake;
-    }
-
     public GuessPaperStatusEnum getStatus() {
         return status;
     }
@@ -109,13 +86,5 @@ public class GuessPaper {
 
     public void setRoom(Room room) {
         this.room = room;
-    }
-
-    public Double getWins() {
-        return wins;
-    }
-
-    public void setWins(Double wins) {
-        this.wins = wins;
     }
 }

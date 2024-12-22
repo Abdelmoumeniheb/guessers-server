@@ -27,8 +27,6 @@ public class Room {
     @JsonIgnore
     private List<RoomUser> roomUsers = new ArrayList<>();
 
-    private boolean isBorderless;
-
     @Transient
     private int memberCount;
 
@@ -46,11 +44,10 @@ public class Room {
 
     }
 
-    public Room(String name, User owner, boolean isPublic, boolean isBorderless) {
+    public Room(String name, User owner, boolean isPublic) {
         this.name = name;
         this.owner = owner;
         this.isPublic = isPublic;
-        this.isBorderless = isBorderless;
         this.invites = new ArrayList<>();
     }
 
@@ -100,13 +97,5 @@ public class Room {
 
     public void setRoomUsers(List<RoomUser> roomUsers) {
         this.roomUsers = roomUsers;
-    }
-
-    public boolean isBorderless() {
-        return isBorderless;
-    }
-
-    public void setBorderless(boolean borderless) {
-        isBorderless = borderless;
     }
 }

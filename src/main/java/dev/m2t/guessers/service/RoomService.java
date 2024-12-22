@@ -56,13 +56,11 @@ public class RoomService {
         room.setPublic(createRoomRequest.getPublico());
         room.setRoomUsers(new ArrayList<>());
         room.setOwner(user.get());
-        room.setBorderless(createRoomRequest.getBorderless());
 
         // Create RoomUser (owner)
         RoomUser roomUser = new RoomUser();
         roomUser.setUser(user.get());
         roomUser.setRoom(room);
-        roomUser.setBalance(1000.0);
         roomUser.setOwner(true);
         roomUser.setScore(0);
 
@@ -85,11 +83,6 @@ public class RoomService {
             RoomUser roomUser = new RoomUser();
             roomUser.setUser(user);
             roomUser.setRoom(room);
-            if(room.isBorderless()) {
-                roomUser.setBalance(0.0);
-            } else {
-                roomUser.setBalance(1000.0);
-            }
             roomUser.setOwner(false);
             roomUser.setScore(0);
             room.getRoomUsers().add(roomUser);
@@ -209,7 +202,6 @@ public class RoomService {
         RoomUser roomUser = new RoomUser();
         roomUser.setUser(user);
         roomUser.setRoom(room);
-        roomUser.setBalance(1000.0);
         roomUser.setOwner(false);
         roomUser.setScore(0);
 
@@ -255,13 +247,8 @@ public class RoomService {
                 .sorted(Comparator.comparing(RoomUser::getScore).reversed())
                 .limit(3)
                 .collect(Collectors.toList());
-        List<RoomUser> roomUsersSortedByBalance = roomUsers.stream()
-                .sorted(Comparator.comparing(RoomUser::getBalance).reversed())
-                .limit(3)
-                .collect(Collectors.toList());
 
         roomRanksResponse.setRankedByCorrectPredictions(roomUsersSortedByCorrectPredictions);
-        roomRanksResponse.setRankedByBalance(roomUsersSortedByBalance);
         roomRanksResponse.setUserCount(roomUsers.size());
         return new BaseResponse("Room ranks fetched successfully.", true, false, roomRanksResponse);
     }
@@ -269,10 +256,6 @@ public class RoomService {
     public BaseResponse giveToken(Long roomId, List<String> roomUserIds, Double amount, String username) {
         logger.info("Give token request received for room: {} and user: {}", roomId, username);
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "id", roomId));
-
-        if(room.isBorderless()) {
-            return new BaseResponse("This room is borderless. You cannot give tokens in borderless rooms.", false, true);
-        }
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
         RoomUser roomUser = roomUserRepository.findByRoomAndUser(room, user).orElseThrow(() -> new ResourceNotFoundException("Room User", "user", user.getUsername()));
@@ -285,7 +268,6 @@ public class RoomService {
         List<Long> roomUserIdsLong = roomUserIds.stream().map(Long::parseLong).collect(Collectors.toList());
         List<RoomUser> roomUsers = roomUserRepository.findAllByIdIn(roomUserIdsLong);
         for (RoomUser ru : roomUsers) {
-            ru.setBalance(ru.getBalance() + amount);
             LendLog lendLog = new LendLog();
             lendLog.setAmount(amount);
             lendLog.setCreatedOn(LocalDateTime.now());

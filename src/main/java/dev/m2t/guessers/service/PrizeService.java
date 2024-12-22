@@ -74,11 +74,10 @@ public class PrizeService {
             return new BaseResponse("Prize is not active. Thus cannot be bought.", false, true);
         }
 
-        if(buyer.getBalance() < prize.getValue()) {
+        if(buyer.getScore() < prize.getValue()) {
             return new BaseResponse("You do not have enough balance.", false, true);
         }
 
-        buyer.setBalance(buyer.getBalance() - prize.getValue());
         userRepository.save(user);
 
         prize.setActive(false);

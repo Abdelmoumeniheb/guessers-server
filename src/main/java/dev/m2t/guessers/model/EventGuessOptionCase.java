@@ -13,7 +13,6 @@ public class EventGuessOptionCase {
     private Long id;
 
     private String name;
-    private Double odds;
 
     @ManyToOne
     @JoinColumn(name = "event_guess_option_id", nullable = false)
@@ -29,9 +28,8 @@ public class EventGuessOptionCase {
 
     }
 
-    public EventGuessOptionCase(String name, Double odds, EventGuessOption eventGuessOption) {
+    public EventGuessOptionCase(String name, EventGuessOption eventGuessOption) {
         this.name = name;
-        this.odds = odds;
         this.eventGuessOption = eventGuessOption;
     }
 
@@ -49,14 +47,6 @@ public class EventGuessOptionCase {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getOdds() {
-        return odds;
-    }
-
-    public void setOdds(Double odds) {
-        this.odds = odds;
     }
 
     public EventGuessOption getEventGuessOption() {

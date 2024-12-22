@@ -7,15 +7,13 @@ public class CreateRoomRequest {
     private String name;
 
     private Boolean publico;
-    private Boolean borderless;
 
     public CreateRoomRequest() {
     }
 
-    public CreateRoomRequest(String name, Boolean publico, Boolean borderless) {
+    public CreateRoomRequest(String name, Boolean publico) {
         this.name = name;
         this.publico = publico;
-        this.borderless = borderless;
     }
 
     public String getName() {
@@ -32,13 +30,5 @@ public class CreateRoomRequest {
 
     public void setPublico(Boolean publico) {
         this.publico = publico;
-    }
-
-    public Boolean getBorderless() {
-        return borderless;
-    }
-
-    public void setBorderless(Boolean borderless) {
-        this.borderless = borderless;
     }
 }

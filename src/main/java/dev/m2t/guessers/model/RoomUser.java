@@ -19,7 +19,6 @@ public class RoomUser {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Double balance;
     private Boolean isOwner;
     private Integer score;
 
@@ -40,10 +39,9 @@ public class RoomUser {
 
     }
 
-    public RoomUser(Room room, User user, Double balance, Boolean isOwner, Integer score) {
+    public RoomUser(Room room, User user, Boolean isOwner, Integer score) {
         this.room = room;
         this.user = user;
-        this.balance = balance;
         this.isOwner = isOwner;
         this.score = score;
     }
@@ -70,14 +68,6 @@ public class RoomUser {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
     }
 
     public Boolean getOwner() {
